@@ -15,7 +15,8 @@
 #include "TempConfigSection.h"
 #include "TempReader.h"
 
-class Simulator {
+class Simulator
+{
 public:
   bool Initialize(TaskConfigSection *taskN);
   void PreloadForcings(char *file, bool cali);
@@ -24,6 +25,7 @@ public:
 
   void CleanUp();
   void BasinAvg();
+  void BasinAvgPrecip();
   void Simulate(bool trackPeaks = false);
   float SimulateForCali(float *testParams);
   float *SimulateForCaliTS(float *testParams);
@@ -81,15 +83,10 @@ private:
   TimeUnit *timeStep, *timeStepSR, *timeStepLR, *timeStepPrecip, *timeStepQPF,
       *timeStepPET, *timeStepTemp, *timeStepTempF;
   float precipConvert, qpfConvert, petConvert, timeStepHours, timeStepHoursLR;
-  TimeVar currentTime, currentTimePrecip, currentTimeQPF, currentTimePET,
-      currentTimeTemp, currentTimeTempF, beginTime, endTime, warmEndTime,
-      beginLRTime;
-  DatedName *precipFile, *qpfFile, *petFile, *tempFile, *tempFFile,
-      currentTimeText, currentTimeTextOutput;
-  std::vector<float> currentFF, currentSF, currentQ, avgPrecip, avgPET, avgSWE,
-      currentSWE, avgT, avgSM, avgFF, avgSF, currentDepth;
-  std::vector<FloatGrid *> paramGrids, paramGridsRoute, paramGridsSnow,
-      paramGridsInundation;
+  TimeVar currentTime, currentTimePrecip, currentTimeQPF, currentTimePET, currentTimeTemp, currentTimeTempF, beginTime, endTime, warmEndTime, beginLRTime;
+  DatedName *precipFile, *qpfFile, *petFile, *tempFile, *tempFFile, currentTimeText, currentTimeTextOutput;
+  std::vector<float> currentFF, currentSF, currentQ, avgPrecip, avgPET, avgSWE, currentSWE, avgT, avgSM, avgFF, avgSF, currentDepth, computeVec;
+  std::vector<FloatGrid *> paramGrids, paramGridsRoute, paramGridsSnow, paramGridsInundation;
   bool hasQPF, hasTempF, wantsDA;
   bool inLR;
   std::vector<bool> gaugesUsed;
@@ -105,13 +102,13 @@ private:
   char *outputPath;
   char *statePath;
   TimeVar stateTime;
-  std::vector<std::vector<float> > peakVals;
+  std::vector<std::vector<float>> peakVals;
   GridWriterFull gridWriter;
   float numYears;
   int missingQPE, missingQPF;
 
   // This is for calibrations only
-  std::vector<std::vector<float> > currentPrecipCali, currentPETCali,
+  std::vector<std::vector<float>> currentPrecipCali, currentPETCali,
       currentTempCali;
   std::vector<float> obsQ, simQ;
   CaliParamConfigSection *caliParamSec;
@@ -130,7 +127,7 @@ private:
   std::vector<SnowModel *> caliSModels;
   std::vector<float *> caliWBCurrentParams, caliRCurrentParams,
       caliSCurrentParams;
-  std::vector<std::map<GaugeConfigSection *, float *> > caliWBFullParamSettings,
+  std::vector<std::map<GaugeConfigSection *, float *>> caliWBFullParamSettings,
       caliRFullParamSettings, caliSFullParamSettings;
 };
 
